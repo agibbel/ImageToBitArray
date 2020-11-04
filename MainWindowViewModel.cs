@@ -25,6 +25,8 @@ namespace ImageToBitArray
 Формируемая структура имеет вид:
 struct
 {
+    uint16_t posx;      // Позиция по X
+    uint16_t posy;      // Позиция по Y
     uint16_t width;     // Ширина изображения
     uint16_t height;    // Высота изображения
     uint32_t data[];    // Данные
