@@ -7,6 +7,8 @@
     <Authors>Tepliakov Andrey</Authors>
     <Description>Конвертер монохромного изображения в массив, пригодный для использования в программах на C/C++</Description>
     <Copyright>(C) 2020 Andrey Tepliakov</Copyright>
+    <RepositoryUrl>https://github.com/agibbel/ImageToBitArray</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>

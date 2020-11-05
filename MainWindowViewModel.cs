@@ -31,6 +31,10 @@ struct
     uint16_t height;    // Высота изображения
     uint32_t data[];    // Данные
 };
+
+Copyright (C) 2020, Andrey Tepliakov
+Программа распространяется под лицензией GNU GPL-3.0
+Репозиторий с исходным кодом: https://github.com/agibbel/ImageToBitArray
 ";
 
         /// <summary>
@@ -289,9 +293,9 @@ struct
                         int value = 0;
                         ushort y = 0;
                         ushort x = 0;
+                        result += "\r\n\t\t";
                         for (y = 0; y < Height; y++)
                         {
-                            result += "\r\n\t\t";
                             for (x = 0; x < Width; x++)
                             {
                                 previewBitmap.SetPixel(x, y, Color.FromArgb(Convert.ToInt32(pixels[y + Y, x + X] ? _foreground : _background)));
@@ -329,8 +333,8 @@ struct
                                 result += "0x" + value.ToString("X") + ", ";
                         }
                     }
-                    if (result[^1] == ',')
-                        result = result[0..^1];
+                    if (result[^1] == ' ' && result[^2] == ',')
+                        result = result[0..^2];
                     result += "\r\n\t}\r\n}";
                     Preview = ConvertBitmapToBitmapImage(previewBitmap);
                     Result = result;
