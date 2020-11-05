@@ -32,9 +32,13 @@ struct
     uint32_t data[];    // Данные
 };
 
+Пример использования:
+https://gist.github.com/agibbel/670a4201cc758dcda02273323c14d5c9
+
 Copyright (C) 2020, Andrey Tepliakov
 Программа распространяется под лицензией GNU GPL-3.0
-Репозиторий с исходным кодом: https://github.com/agibbel/ImageToBitArray
+Репозиторий с исходным кодом:
+https://github.com/agibbel/ImageToBitArray
 ";
 
         /// <summary>
