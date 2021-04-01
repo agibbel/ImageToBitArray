@@ -182,6 +182,20 @@ https://github.com/agibbel/ImageToBitArray
         }
         private string _result;
 
+        public uint ResultSize
+        {
+            get => _resultSize;
+            set
+            {
+                if (value != _resultSize)
+                {
+                    _resultSize = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ResultSize)));
+                }
+            }
+        }
+        private uint _resultSize;
+
         /// <summary>
         /// Изображение для предпросмотра
         /// </summary>
@@ -207,7 +221,7 @@ https://github.com/agibbel/ImageToBitArray
         private BitmapImage ConvertBitmapToBitmapImage(Bitmap src)
         {
             MemoryStream ms = new MemoryStream();
-            src.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            src.Save(ms, ImageFormat.Bmp);
             BitmapImage image = new BitmapImage();
             image.BeginInit();
             ms.Seek(0, SeekOrigin.Begin);
@@ -290,6 +304,7 @@ https://github.com/agibbel/ImageToBitArray
                     });
                     using Bitmap previewBitmap = new Bitmap(Width, Height, PixelFormat.Format24bppRgb);
                     string result = "{\r\n\t" + X.ToString() + ",\r\n\t" + Y.ToString() + ",\r\n\t" + Width.ToString() + ",\r\n\t" + Height.ToString() + ",\r\n\t{";
+                    uint arraysize = 8;
                     if (NonStopData)
                     {
                         int value = 0;
@@ -306,12 +321,16 @@ https://github.com/agibbel/ImageToBitArray
                                 if (((x + y * Width) & 31) == 31)
                                 {
                                     result += "0x" + value.ToString("X") + ", ";
+                                    arraysize += 4;
                                     value = 0;
                                 }
                             }
                         }
-                        if (((x + y * Width) & 31) != 31)
+                        if ((((x - 1) + (y - 1) * Width) & 31) != 31)
+                        {
                             result += "0x" + value.ToString("X") + ", ";
+                            arraysize += 4;
+                        }
                     }
                     else
                     {
@@ -328,11 +347,15 @@ https://github.com/agibbel/ImageToBitArray
                                 if ((x & 31) == 31)
                                 {
                                     result += "0x" + value.ToString("X") + ", ";
+                                    arraysize += 4;
                                     value = 0;
                                 }
                             }
-                            if ((x & 31) != 31)
+                            if (((x - 1) & 31) != 31)
+                            {
                                 result += "0x" + value.ToString("X") + ", ";
+                                arraysize += 4;
+                            }
                         }
                     }
                     if (result[^1] == ' ' && result[^2] == ',')
@@ -340,17 +363,20 @@ https://github.com/agibbel/ImageToBitArray
                     result += "\r\n\t}\r\n}";
                     Preview = ConvertBitmapToBitmapImage(previewBitmap);
                     Result = result;
+                    ResultSize = arraysize;
                 }
                 else
                 {
                     Preview = null;
                     Result = string.Empty;
+                    ResultSize = 0;
                 }
             }
             catch
             {
                 Preview = null;
                 Result = "Ошибка преобразования";
+                ResultSize = 0;
             }
         }
 
